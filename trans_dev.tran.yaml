@@ -1,0 +1,60 @@
+type: "transformation"
+version: "1.0"
+pipeline:
+  components:
+    DEMOGRAPHY:
+      type: "table-input"
+      parameters:
+        componentName: "DEMOGRAPHY"
+        database: "[Environment Default]"
+        schema: "[Environment Default]"
+        targetTable: "DEMOGRAPHY"
+        columnNames:
+        - "AGE_DESC"
+        - "MARITAL_STATUS_CODE"
+        - "INCOME_DESC"
+        - "HOMEOWNER_DESC"
+        - "HH_COMP_DESC"
+        - "HOUSEHOLD_SIZE_DESC"
+        - "KID_CATEGORY_DESC"
+        - "household_key"
+        timeOffset:
+    Calculator:
+      type: "calculator"
+      sources:
+      - "DEMOGRAPHY"
+      parameters:
+        componentName: "Calculator"
+        includeInputColumns: "Yes"
+        calculations:
+        - - "TO_NUMBER(\"household_key\")"
+          - "int_household"
+    Aggregate:
+      type: "aggregate"
+      sources:
+      - "Calculator"
+      parameters:
+        componentName: "Aggregate"
+        groupings:
+        - "int_household"
+        aggregations:
+        - - "int_household"
+          - "Sum"
+        groupingType: "Group By"
+design:
+  components:
+    DEMOGRAPHY:
+      position:
+        x: -350
+        "y": -30
+      tempMetlId: 1
+    Calculator:
+      position:
+        x: -190
+        "y": -30
+      tempMetlId: 2
+    Aggregate:
+      position:
+        x: -30
+        "y": -30
+      tempMetlId: 3
