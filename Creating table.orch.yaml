@@ -15,13 +15,13 @@ pipeline:
         componentName: "S3 Load"
         stage: "[Custom]"
         authentication: "Credentials"
-        s3ObjectPrefix: "s3://dpcs3load/demo/hh_demographic.csv"
+        s3ObjectPrefix: "s3://dpcs3load/demo/customer_data_1.csv"
         pattern: ".*"
         encryption: "None"
         warehouse: "[Environment Default]"
         database: "[Environment Default]"
         schema: "[Environment Default]"
-        targetTable: "DEMOGRAPHY"
+        targetTable: "CUSTOMER_DATA"
         loadColumns:
         format: "[Custom]"
         fileType: "CSV"
@@ -54,11 +54,11 @@ design:
   components:
     Start:
       position:
-        x: 0
-        "y": 0
+        x: -140
+        "y": -70
       tempMetlId: 1
     S3 Load:
       position:
-        x: 320
-        "y": 0
-      tempMetlId: 3
+        x: 20
+        "y": -70
+      tempMetlId: 2

@@ -1,0 +1,68 @@
+type: "transformation"
+version: "1.0"
+pipeline:
+  components:
+    Customer:
+      type: "table-input"
+      parameters:
+        componentName: "Customer"
+        database: "[Environment Default]"
+        schema: "[Environment Default]"
+        targetTable: "CUSTOMER_DATA"
+        columnNames:
+        - "CUST_ID"
+        - "CREDIT_CARD_NUMBER"
+        - "BALANCE"
+        - "PURCHASES"
+        - "INSTALLMENTS_PURCHASES"
+        - "CASH_ADVANCE"
+        - "CREDIT_LIMIT"
+        - "PAYMENTS"
+        - "MINIMUM_PAYMENTS"
+        - "TENURE"
+        - "DATE_OF_TXN"
+        timeOffset:
+    Calculator:
+      type: "calculator"
+      sources:
+      - "Customer"
+      parameters:
+        componentName: "Calculator"
+        includeInputColumns: "Yes"
+        calculations:
+        - - "CASE     WHEN \"PURCHASES\" BETWEEN 700 AND 3000 THEN 'Low Customer'\
+            \     WHEN \"PURCHASES\" > 3000 AND \"PURCHASES\" <= 9000 THEN 'Medium\
+            \ Customer'     WHEN \"PURCHASES\" > 9000 THEN 'High Customer'     ELSE\
+            \ 'Undefined' END"
+          - "Purchase_Category"
+    Rewrite Table:
+      type: "rewrite-table"
+      sources:
+      - "Calculator"
+      parameters:
+        componentName: "Rewrite Table"
+        warehouse: "[Environment Default]"
+        database: "[Environment Default]"
+        schema: "[Environment Default]"
+        targetTable: "Customer_Rewrite"
+        orderBy:
+      postProcessing:
+        updateOutputMessage:
+        updateScalarVariables:
+design:
+  components:
+    Customer:
+      position:
+        x: 130
+        "y": 40
+      tempMetlId: 1
+    Calculator:
+      position:
+        x: 290
+        "y": 40
+      tempMetlId: 2
+    Rewrite Table:
+      position:
+        x: 450
+        "y": 40
+      tempMetlId: 3
